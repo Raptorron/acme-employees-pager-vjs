@@ -1,20 +1,81 @@
 <html>
   <head>
     <style>
+      #user {
+        display: flex;
+        justify-content: space-around;
+        border: 1px solid black;
+      }
+
+      #user div {
+        width:500px;
+        height:40px;
+      }
+
+      #tableHeaders {
+        display: flex;
+        justify-content: space-around;
+        border: 1px solid black;
+      }
+
+      #tableHeaders div {
+        width: 500px;
+        height: 40px;
+      }
     </style>
   </head>
   <body>
+  <h1>Acme Employee Lister</h1>
+  <div id="pageHeader"></div>
   <div id='userlist'>
   </div>
     <script>
       const userlist = document.querySelector('#userlist');
+      const tableHeader = document.querySelector('#tableHeaders');
+      const pageHeader = document.querySelector('#pageHeader');
+
+      const getPages = () => {
+        const html = `
+          <a name="first">First</a>
+          <a name="pageNumber">Insert Number Here</a>
+          <a name="next">Next</a>
+          <a name="last">Last</a>
+        `;
+        pageHeader.innerHTML = html;
+      };
+
       const getUsers = async() =>{
         const response = await fetch('https://acme-users-api-rev.herokuapp.com/api/users');
         const data = await response.json();
-        const html = data.map( company => {`
-        <div><div>${company.firstName}</div><div>${company.lastName}</div><div>${company.email}</div><div>${company.title}</div></div>`}).join('');
-        userlist.innerHTML=html;
+        console.log(data);
+        const html = `
+          <div id="tableHeaders">
+            <div>First Name</div>
+            <div>Last Name</div>
+            <div>Email</div>
+            <div>Title</div>
+          </div>
+        ` + data.users.map( company => `
+          <div id="user">
+            <div>${company.firstName}</div>
+            <div>${company.lastName}</div>
+            <div>${company.email}</div>
+            <div>${company.title}</div>
+          </div>`).join('');
+        userlist.innerHTML = html;
       }
+
+      pageHeader.addEventListener('click', (ev) => {
+        if (ev.target.name === 'next') {
+          console.log('next page please');
+        } else if (ev.taget.name === 'first') {
+          console.log('show first page');
+        } else if (ev.target.last === 'last') {
+          console.log('last page');
+        }
+      });
+
+      getPages();
       getUsers();
 
     </script>
