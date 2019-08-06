@@ -33,6 +33,7 @@
       const userlist = document.querySelector('#userlist');
       const tableHeader = document.querySelector('#tableHeaders');
       const pageHeader = document.querySelector('#pageHeader');
+      let count = 0;
 
       const getPages = () => {
         const html = `
@@ -44,10 +45,18 @@
         pageHeader.innerHTML = html;
       };
 
-      const getUsers = async() =>{
-        const response = await fetch('https://acme-users-api-rev.herokuapp.com/api/users');
-        const data = await response.json();
-        console.log(data);
+      const getUsers = async(id) => {
+        console.log(id);
+        let response;
+        let data;
+        if(id === undefined) {
+          response = await fetch(`https://acme-users-api-rev.herokuapp.com/api/users`);
+          data = await response.json();
+        } else {
+          response = await fetch(`https://acme-users-api-rev.herokuapp.com/api/users/${id}`);
+          data = await response.json();
+        }
+
         const html = `
           <div id="tableHeaders">
             <div>First Name</div>
@@ -67,9 +76,11 @@
 
       pageHeader.addEventListener('click', (ev) => {
         if (ev.target.name === 'next') {
-
+          count++;;
+          getUsers(count);
         } else if (ev.target.name === 'first') {
-
+          count = undefined;
+          getUsers(count);
         } else if (ev.target.name === 'last') {
 
         }
