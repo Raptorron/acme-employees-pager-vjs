@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <style>
+    </style>
+  </head>
+  <body>
+  <div id='userlist'>
+  </div>
+    <script>
+      const userlist = document.querySelector('#userlist');
+      const getUsers = async() =>{
+        const response = await fetch('https://acme-users-api-rev.herokuapp.com/api/users');
+        const data = await response.json();
+        const html = data.map( company => {`
+        <div><div>${company.firstName}</div><div>${company.lastName}</div><div>${company.email}</div><div>${company.title}</div></div>`}).join('');
+        userlist.innerHTML=html;
+      }
+      getUsers();
+
+    </script>
+  </body>
+</html>
